@@ -3,132 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CareConnect</title>
+    <title>MemoryLink</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Lora:wght@500;700&display=swap');
-        :root { --bg: #FAF7F2; --card: #FFFFFF; --amber: #E8A020; --blue: #4A78A8; --txt: #1E1A14; --txt-soft: #9A8E7C; --border: #EDE8DF; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--txt); }
-        .app-container { max-width: 500px; margin: 0 auto; min-height: 100vh; background: white; position: relative; overflow: hidden; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
-        .screen-center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; padding: 40px; text-align: center; }
-        .logo-icon { font-size: 64px; margin-bottom: 20px; }
-        .title { font-family: 'Lora', serif; font-size: 32px; margin-bottom: 8px; }
-        .subtitle { color: var(--txt-soft); margin-bottom: 40px; font-weight: 600; }
-        .main-options { width: 100%; display: flex; flex-direction: column; gap: 16px; }
-        .opt-card { background: var(--bg); padding: 24px; border-radius: 20px; border: 2px solid var(--border); cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 20px; }
-        .opt-card:hover { transform: translateY(-3px); border-color: var(--amber); }
-        .name-grid { display: grid; grid-template-columns: 1fr; gap: 12px; width: 100%; }
-        .name-pill { padding: 18px; border-radius: 15px; background: var(--bg); border: 1.5px solid var(--border); font-weight: 700; cursor: pointer; transition: 0.2s; text-align: center; }
-        .name-pill:hover { background: var(--amber); color: white; border-color: var(--amber); }
-        .dash-header { padding: 24px; background: var(--txt); color: white; display: flex; justify-content: space-between; align-items: center; }
-        .nav-tabs { display: flex; overflow-x: auto; gap: 8px; padding: 16px; border-bottom: 1px solid var(--border); }
-        .tab { padding: 8px 16px; border-radius: 20px; background: var(--bg); border: 1px solid var(--border); font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
-        .tab.active { background: var(--amber); color: white; border-color: var(--amber); }
-        .content-area { padding: 20px; }
-        .item-card { background: var(--bg); padding: 16px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .btn-back { background: none; border: none; color: var(--txt-soft); cursor: pointer; margin-bottom: 20px; font-weight: 800; }
-        .control-btn { background: #fee2e2; color: #dc2626; border: none; padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 11px; }
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=Lora:wght@500;700&display=swap');
+        :root { --bg: #FDFBF7; --header: #A67C00; --accent: #E8A020; --card: #FFFFFF; --txt: #332D24; --green: #7FB069; }
+        body { font-family: 'Nunito', sans-serif; background: #f0f0f0; color: var(--txt); margin: 0; }
+        .app-container { max-width: 500px; margin: 0 auto; min-height: 100vh; background: var(--bg); position: relative; border-left: 1px solid #ddd; }
+        .header-banner { background: var(--header); color: white; padding: 25px; position: relative; }
+        .header-title { font-family: 'Lora', serif; font-size: 24px; margin: 0; }
+        .date-display { position: absolute; right: 20px; top: 25px; text-align: right; font-size: 12px; opacity: 0.9; }
+        .stats-bar { background: #FFF9E6; border: 1px solid #FFEBB3; margin: 15px; padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; }
+        .nav-tabs { display: flex; gap: 10px; padding: 0 15px; overflow-x: auto; margin-bottom: 20px; }
+        .tab { padding: 8px 16px; border-radius: 20px; background: white; border: 1.5px solid #EEE; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+        .tab.active { border-color: var(--accent); background: #FFF9E6; color: var(--header); }
+        .section-title { padding: 0 20px; font-family: 'Lora', serif; font-size: 20px; margin-bottom: 15px; }
+        /* Routine Styles */
+        .routine-item { background: white; margin: 0 15px 10px; padding: 15px; border-radius: 12px; border: 1px solid #EAE2D5; display: flex; align-items: center; gap: 15px; }
+        .check-circle { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #DDD; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .check-circle.done { background: var(--green); border-color: var(--green); color: white; }
+        /* Game Styles */
+        .game-card { background: white; margin: 15px; padding: 30px; border-radius: 20px; text-align: center; border: 1px solid #EAE2D5; }
+        .math-text { font-family: 'Lora', serif; font-size: 36px; margin: 20px 0; }
+        .game-input { width: 80px; padding: 10px; font-size: 20px; text-align: center; border: 2px solid #DDD; border-radius: 8px; margin-bottom: 20px; }
+        .btn-check { background: var(--accent); color: white; border: none; padding: 10px 30px; border-radius: 20px; font-weight: 800; cursor: pointer; width: 100%; }
     </style>
 </head>
 <body>
     <div id="root"></div>
-
     <script type="text/babel">
         const { useState } = React;
 
-        function CareConnect() {
-            const [view, setView] = useState("home");
-            const [role, setRole] = useState(null);
+        function MemoryLink() {
             const [activeTab, setActiveTab] = useState("Routines");
+            const [points, setPoints] = useState(88);
+            
+            // Interactive Routine State
+            const [tasks, setTasks] = useState([
+                { id: 1, time: "7:30", title: "Morning Medication", type: "MEDICATION", done: true },
+                { id: 2, time: "9:00", title: "Breakfast", type: "MEAL", done: true },
+                { id: 3, time: "10:30", title: "Morning Walk", type: "ACTIVITY", done: false },
+                { id: 4, time: "12:30", title: "Lunch", type: "MEAL", done: false }
+            ]);
 
-            const people = ["Anvitha", "Saanvi", "Saksham"];
-            const tabs = ["Routines", "Games", "Photos", "Memos", "Friends"];
+            // Simple Game State
+            const [gameVal, setGameVal] = useState("");
+            const [feedback, setFeedback] = useState("");
 
-            if (view === "home") {
-                return (
-                    <div className="app-container">
-                        <div className="screen-center">
-                            <div className="logo-icon">☀️</div>
-                            <h1 className="title">CareConnect</h1>
-                            <p className="subtitle">Warmth, clarity, and trust.</p>
-                            <div className="main-options">
-                                <div className="opt-card" onClick={() => { setRole("patient"); setView("select-patient"); }}>
-                                    <span style={{fontSize: '32px'}}>👤</span>
-                                    <div style={{textAlign: 'left'}}>
-                                        <div style={{fontWeight: 900}}>Patient</div>
-                                        <div style={{fontSize: '12px', color: '#9A8E7C'}}>Access your care</div>
-                                    </div>
-                                </div>
-                                <div className="opt-card" onClick={() => { setRole("family"); setView("select-family"); }}>
-                                    <span style={{fontSize: '32px'}}>🏠</span>
-                                    <div style={{textAlign: 'left'}}>
-                                        <div style={{fontWeight: 900}}>Family</div>
-                                        <div style={{fontSize: '12px', color: '#9A8E7C'}}>View & manage updates</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            }
+            const toggleTask = (id) => {
+                setTasks(tasks.map(t => t.id === id ? {...t, done: !t.done} : t));
+                setPoints(prev => prev + 2);
+            };
 
-            if (view.startsWith("select")) {
-                return (
-                    <div className="app-container">
-                        <div className="screen-center">
-                            <button className="btn-back" onClick={() => setView("home")}>← BACK</button>
-                            <h2 className="title">Who is this?</h2>
-                            <p className="subtitle">Select your profile to continue</p>
-                            <div className="name-grid">
-                                {people.map(name => (
-                                    <div key={name} className="name-pill" onClick={() => setView("dashboard")}>
-                                        {name}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                );
-            }
+            const checkAnswer = () => {
+                if (gameVal === "15") {
+                    setFeedback("Correct! 🌟 +5 pts");
+                    setPoints(points + 5);
+                } else {
+                    setFeedback("Try again!");
+                }
+            };
 
             return (
                 <div className="app-container">
-                    <div className="dash-header">
-                        <div>
-                            <div style={{fontSize: '10px', opacity: 0.7, fontWeight: 800}}>{role?.toUpperCase()} VIEW</div>
-                            <div style={{fontFamily: 'Lora', fontSize: '18px'}}>CareConnect</div>
+                    <div className="header-banner">
+                        <div className="header-title">MemoryLink</div>
+                        <div style={{fontSize: '11px', opacity: 0.8}}>Your Personal Memory Book</div>
+                        <div className="date-display">
+                            <strong>Thursday</strong><br/>February 26, 2026
                         </div>
-                        <button onClick={() => setView("home")} style={{background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid white', padding: '4px 12px', borderRadius: '20px', fontSize: '11px', cursor: 'pointer'}}>Exit</button>
                     </div>
+
+                    <div className="stats-bar">
+                        <span>☀️ Good afternoon! {tasks.filter(t => t.done).length} of 9 tasks done.</span>
+                        <span style={{background: 'var(--accent)', color: 'white', padding: '2px 8px', borderRadius: '10px'}}>🌳 {points}</span>
+                    </div>
+
                     <div className="nav-tabs">
-                        {tabs.map(tab => (
+                        {["People", "Routines", "Brain & Reflection", "My Tree"].map(tab => (
                             <div key={tab} className={`tab ${activeTab === tab ? 'active' : ''}`} onClick={() => setActiveTab(tab)}>
-                                {tab}
+                                {tab === "Routines" && "📅"} {tab === "People" && "👥"} {tab === "Brain & Reflection" && "🧩"} {tab === "My Tree" && "🌳"} {tab}
                             </div>
                         ))}
                     </div>
-                    <div className="content-area">
-                        <h3 style={{marginBottom: '16px', fontFamily: 'Lora'}}>{activeTab}</h3>
-                        {[1, 2, 3].map(i => (
-                            <div key={i} className="item-card">
-                                <div>
-                                    <div style={{fontWeight: 700}}>{activeTab} Item #{i}</div>
-                                    <div style={{fontSize: '12px', color: '#9A8E7C'}}>10:00 AM</div>
+
+                    {activeTab === "Routines" && (
+                        <div>
+                            <h2 className="section-title">Today's Schedule</h2>
+                            {tasks.map(task => (
+                                <div key={task.id} className="routine-item">
+                                    <div className={`check-circle ${task.done ? 'done' : ''}`} onClick={() => toggleTask(task.id)}>
+                                        {task.done && "✓"}
+                                    </div>
+                                    <div style={{flex: 1}}>
+                                        <div style={{fontSize: '11px', color: '#999', fontWeight: 800}}>{task.time}</div>
+                                        <div style={{fontWeight: 700, textDecoration: task.done ? 'line-through' : 'none', color: task.done ? '#999' : '#332D24'}}>{task.title}</div>
+                                    </div>
+                                    <div style={{fontSize: '9px', fontWeight: 900, color: '#A67C00'}}>{task.type}</div>
                                 </div>
-                                {role === "family" && <button className="control-btn">Manage</button>}
+                            ))}
+                        </div>
+                    )}
+
+                    {activeTab === "Brain & Reflection" && (
+                        <div>
+                            <h2 className="section-title">Brain Arithmetic</h2>
+                            <div className="game-card">
+                                <p style={{fontSize: '14px', fontWeight: 700}}>Solve this:</p>
+                                <div className="math-text">9 + 6 = ?</div>
+                                <input 
+                                    type="number" 
+                                    className="game-input" 
+                                    value={gameVal}
+                                    onChange={(e) => setGameVal(e.target.value)}
+                                    placeholder="?"
+                                />
+                                <button className="btn-check" onClick={checkAnswer}>Check ✓</button>
+                                {feedback && <p style={{marginTop: '15px', fontWeight: 700, color: feedback.includes("Correct") ? 'var(--green)' : 'red'}}>{feedback}</p>}
                             </div>
-                        ))}
-                    </div>
+                        </div>
+                    )}
+
+                    {activeTab === "My Tree" && (
+                        <div style={{textAlign: 'center', padding: '40px'}}>
+                            <h2 className="section-title">Your Memory Tree</h2>
+                            <div style={{fontSize: '80px', margin: '20px'}}>🌳</div>
+                            <p><strong>Sapling Level</strong></p>
+                            <div style={{background: '#EEE', height: '10px', borderRadius: '5px', margin: '20px'}}>
+                                <div style={{background: 'var(--green)', height: '100%', width: `${(points/150)*100}%`, borderRadius: '5px'}}></div>
+                            </div>
+                            <p style={{fontSize: '13px'}}>{150 - points} more points to reach Young Tree</p>
+                        </div>
+                    )}
                 </div>
             );
         }
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<CareConnect />);
+        root.render(<MemoryLink />);
     </script>
 </body>
 </html>
