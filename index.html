@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareConnect</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Lora:wght@500;700&display=swap');
+        :root { --bg: #FAF7F2; --card: #FFFFFF; --amber: #E8A020; --blue: #4A78A8; --txt: #1E1A14; --txt-soft: #9A8E7C; --border: #EDE8DF; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--txt); }
+        .app-container { max-width: 500px; margin: 0 auto; min-height: 100vh; background: white; position: relative; overflow: hidden; border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
+        .screen-center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; padding: 40px; text-align: center; }
+        .logo-icon { font-size: 64px; margin-bottom: 20px; }
+        .title { font-family: 'Lora', serif; font-size: 32px; margin-bottom: 8px; }
+        .subtitle { color: var(--txt-soft); margin-bottom: 40px; font-weight: 600; }
+        .main-options { width: 100%; display: flex; flex-direction: column; gap: 16px; }
+        .opt-card { background: var(--bg); padding: 24px; border-radius: 20px; border: 2px solid var(--border); cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 20px; }
+        .opt-card:hover { transform: translateY(-3px); border-color: var(--amber); }
+        .name-grid { display: grid; grid-template-columns: 1fr; gap: 12px; width: 100%; }
+        .name-pill { padding: 18px; border-radius: 15px; background: var(--bg); border: 1.5px solid var(--border); font-weight: 700; cursor: pointer; transition: 0.2s; text-align: center; }
+        .name-pill:hover { background: var(--amber); color: white; border-color: var(--amber); }
+        .dash-header { padding: 24px; background: var(--txt); color: white; display: flex; justify-content: space-between; align-items: center; }
+        .nav-tabs { display: flex; overflow-x: auto; gap: 8px; padding: 16px; border-bottom: 1px solid var(--border); }
+        .tab { padding: 8px 16px; border-radius: 20px; background: var(--bg); border: 1px solid var(--border); font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+        .tab.active { background: var(--amber); color: white; border-color: var(--amber); }
+        .content-area { padding: 20px; }
+        .item-card { background: var(--bg); padding: 16px; border-radius: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-back { background: none; border: none; color: var(--txt-soft); cursor: pointer; margin-bottom: 20px; font-weight: 800; }
+        .control-btn { background: #fee2e2; color: #dc2626; border: none; padding: 4px 8px; border-radius: 6px; cursor: pointer; font-size: 11px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        function CareConnect() {
+            const [view, setView] = useState("home");
+            const [role, setRole] = useState(null);
+            const [activeTab, setActiveTab] = useState("Routines");
+
+            const people = ["Anvitha", "Saanvi", "Saksham"];
+            const tabs = ["Routines", "Games", "Photos", "Memos", "Friends"];
+
+            if (view === "home") {
+                return (
+                    <div className="app-container">
+                        <div className="screen-center">
+                            <div className="logo-icon">☀️</div>
+                            <h1 className="title">CareConnect</h1>
+                            <p className="subtitle">Warmth, clarity, and trust.</p>
+                            <div className="main-options">
+                                <div className="opt-card" onClick={() => { setRole("patient"); setView("select-patient"); }}>
+                                    <span style={{fontSize: '32px'}}>👤</span>
+                                    <div style={{textAlign: 'left'}}>
+                                        <div style={{fontWeight: 900}}>Patient</div>
+                                        <div style={{fontSize: '12px', color: '#9A8E7C'}}>Access your care</div>
+                                    </div>
+                                </div>
+                                <div className="opt-card" onClick={() => { setRole("family"); setView("select-family"); }}>
+                                    <span style={{fontSize: '32px'}}>🏠</span>
+                                    <div style={{textAlign: 'left'}}>
+                                        <div style={{fontWeight: 900}}>Family</div>
+                                        <div style={{fontSize: '12px', color: '#9A8E7C'}}>View & manage updates</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (view.startsWith("select")) {
+                return (
+                    <div className="app-container">
+                        <div className="screen-center">
+                            <button className="btn-back" onClick={() => setView("home")}>← BACK</button>
+                            <h2 className="title">Who is this?</h2>
+                            <p className="subtitle">Select your profile to continue</p>
+                            <div className="name-grid">
+                                {people.map(name => (
+                                    <div key={name} className="name-pill" onClick={() => setView("dashboard")}>
+                                        {name}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="app-container">
+                    <div className="dash-header">
+                        <div>
+                            <div style={{fontSize: '10px', opacity: 0.7, fontWeight: 800}}>{role?.toUpperCase()} VIEW</div>
+                            <div style={{fontFamily: 'Lora', fontSize: '18px'}}>CareConnect</div>
+                        </div>
+                        <button onClick={() => setView("home")} style={{background: 'rgba(255,255,255,0.1)', color: 'white', border: '1px solid white', padding: '4px 12px', borderRadius: '20px', fontSize: '11px', cursor: 'pointer'}}>Exit</button>
+                    </div>
+                    <div className="nav-tabs">
+                        {tabs.map(tab => (
+                            <div key={tab} className={`tab ${activeTab === tab ? 'active' : ''}`} onClick={() => setActiveTab(tab)}>
+                                {tab}
+                            </div>
+                        ))}
+                    </div>
+                    <div className="content-area">
+                        <h3 style={{marginBottom: '16px', fontFamily: 'Lora'}}>{activeTab}</h3>
+                        {[1, 2, 3].map(i => (
+                            <div key={i} className="item-card">
+                                <div>
+                                    <div style={{fontWeight: 700}}>{activeTab} Item #{i}</div>
+                                    <div style={{fontSize: '12px', color: '#9A8E7C'}}>10:00 AM</div>
+                                </div>
+                                {role === "family" && <button className="control-btn">Manage</button>}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<CareConnect />);
+    </script>
+</body>
+</html>
