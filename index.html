@@ -9,26 +9,42 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=Lora:wght@500;700&display=swap');
-        :root { --bg: #FDFBF7; --header: #A67C00; --accent: #E8A020; --card: #FFFFFF; --txt: #332D24; --green: #7FB069; }
+        :root { --bg: #FDFBF7; --header: #A67C00; --accent: #E8A020; --card: #FFFFFF; --txt: #332D24; --green: #7FB069; --border: #EAE2D5; }
         body { font-family: 'Nunito', sans-serif; background: #f0f0f0; color: var(--txt); margin: 0; }
-        .app-container { max-width: 500px; margin: 0 auto; min-height: 100vh; background: var(--bg); position: relative; border-left: 1px solid #ddd; }
+        .app-container { max-width: 500px; margin: 0 auto; min-height: 100vh; background: var(--bg); position: relative; border-left: 1px solid #ddd; overflow-x: hidden; }
+        
+        /* Home Screen Styles */
+        .home-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; padding: 20px; }
+        .logo-box { background: var(--accent); width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(232, 160, 32, 0.3); }
+        .role-card { background: white; width: 100%; max-width: 300px; padding: 25px; border-radius: 20px; margin: 10px 0; cursor: pointer; border: 2px solid transparent; transition: 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .role-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+
+        /* Dashboard Styles */
         .header-banner { background: var(--header); color: white; padding: 25px; position: relative; }
         .header-title { font-family: 'Lora', serif; font-size: 24px; margin: 0; }
-        .date-display { position: absolute; right: 20px; top: 25px; text-align: right; font-size: 12px; opacity: 0.9; }
-        .stats-bar { background: #FFF9E6; border: 1px solid #FFEBB3; margin: 15px; padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; }
-        .nav-tabs { display: flex; gap: 10px; padding: 0 15px; overflow-x: auto; margin-bottom: 20px; }
-        .tab { padding: 8px 16px; border-radius: 20px; background: white; border: 1.5px solid #EEE; font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+        .sign-out { position: absolute; right: 20px; bottom: 15px; background: rgba(0,0,0,0.2); border: 1px solid white; color: white; padding: 4px 12px; border-radius: 20px; cursor: pointer; font-size: 11px; font-weight: 800; }
+        .stats-bar { background: #FFF9E6; border: 1px solid #FFEBB3; margin: 15px; padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 600; }
+        
+        .nav-tabs { display: flex; gap: 8px; padding: 0 15px; overflow-x: auto; margin-bottom: 15px; }
+        .tab { padding: 8px 14px; border-radius: 20px; background: white; border: 1.5px solid #EEE; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
         .tab.active { border-color: var(--accent); background: #FFF9E6; color: var(--header); }
-        .section-title { padding: 0 20px; font-family: 'Lora', serif; font-size: 20px; margin-bottom: 15px; }
-        /* Routine Styles */
-        .routine-item { background: white; margin: 0 15px 10px; padding: 15px; border-radius: 12px; border: 1px solid #EAE2D5; display: flex; align-items: center; gap: 15px; }
-        .check-circle { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #DDD; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+
+        /* Content Styles */
+        .section-title { padding: 0 20px; font-family: 'Lora', serif; font-size: 20px; margin-bottom: 12px; }
+        .routine-item { background: white; margin: 0 15px 10px; padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; align-items: center; gap: 15px; }
+        .check-circle { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #DDD; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .check-circle.done { background: var(--green); border-color: var(--green); color: white; }
-        /* Game Styles */
-        .game-card { background: white; margin: 15px; padding: 30px; border-radius: 20px; text-align: center; border: 1px solid #EAE2D5; }
-        .math-text { font-family: 'Lora', serif; font-size: 36px; margin: 20px 0; }
-        .game-input { width: 80px; padding: 10px; font-size: 20px; text-align: center; border: 2px solid #DDD; border-radius: 8px; margin-bottom: 20px; }
-        .btn-check { background: var(--accent); color: white; border: none; padding: 10px 30px; border-radius: 20px; font-weight: 800; cursor: pointer; width: 100%; }
+
+        /* Add Form */
+        .add-form { margin: 15px; padding: 15px; background: #fdf2d9; border-radius: 12px; border: 1px dashed var(--accent); }
+        .input-group { margin-bottom: 8px; }
+        .input-group input, .input-group select { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #DDD; font-family: inherit; box-sizing: border-box; }
+        .btn-add { background: var(--header); color: white; border: none; width: 100%; padding: 10px; border-radius: 8px; font-weight: 800; cursor: pointer; }
+
+        /* People Styles */
+        .people-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 15px; }
+        .person-card { background: white; padding: 15px; border-radius: 15px; border: 1px solid var(--border); text-align: center; }
+        .avatar { width: 50px; height: 50px; border-radius: 50%; background: #EEE; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 2px solid var(--accent); }
     </style>
 </head>
 <body>
@@ -37,48 +53,79 @@
         const { useState } = React;
 
         function MemoryLink() {
+            const [view, setView] = useState("home"); // home or dashboard
+            const [role, setRole] = useState(null);
             const [activeTab, setActiveTab] = useState("Routines");
-            const [points, setPoints] = useState(88);
+            const [points, setPoints] = useState(101);
             
-            // Interactive Routine State
+            // Routines State
             const [tasks, setTasks] = useState([
                 { id: 1, time: "7:30", title: "Morning Medication", type: "MEDICATION", done: true },
                 { id: 2, time: "9:00", title: "Breakfast", type: "MEAL", done: true },
-                { id: 3, time: "10:30", title: "Morning Walk", type: "ACTIVITY", done: false },
-                { id: 4, time: "12:30", title: "Lunch", type: "MEAL", done: false }
+                { id: 3, time: "10:30", title: "Morning Walk", type: "ACTIVITY", done: false }
             ]);
 
-            // Simple Game State
-            const [gameVal, setGameVal] = useState("");
-            const [feedback, setFeedback] = useState("");
+            // Form State for new tasks
+            const [newTitle, setNewTitle] = useState("");
+            const [newTime, setNewTime] = useState("");
+            const [newType, setNewType] = useState("ACTIVITY");
 
             const toggleTask = (id) => {
                 setTasks(tasks.map(t => t.id === id ? {...t, done: !t.done} : t));
                 setPoints(prev => prev + 2);
             };
 
-            const checkAnswer = () => {
-                if (gameVal === "15") {
-                    setFeedback("Correct! 🌟 +5 pts");
-                    setPoints(points + 5);
-                } else {
-                    setFeedback("Try again!");
-                }
+            const addTask = () => {
+                if(!newTitle || !newTime) return;
+                const newTask = {
+                    id: Date.now(),
+                    time: newTime,
+                    title: newTitle,
+                    type: newType,
+                    done: false
+                };
+                setTasks([...tasks, newTask]);
+                setNewTitle(""); setNewTime("");
             };
+
+            if (view === "home") {
+                return (
+                    <div className="app-container home-screen">
+                        <div className="logo-box">🧠</div>
+                        <h1 style={{fontFamily:'Lora', margin:0}}>MemoryLink</h1>
+                        <p style={{fontSize:'12px', color:'#999', marginBottom:'30px'}}>Your Personal Memory Book</p>
+                        
+                        <p style={{fontSize:'11px', fontWeight:800, textTransform:'uppercase', letterSpacing:'1px', marginBottom:'15px'}}>Who is opening MemoryLink?</p>
+                        
+                        <div className="role-card" onClick={() => { setRole("Patient"); setView("dashboard"); }}>
+                            <div style={{fontSize:'30px'}}>👵</div>
+                            <div style={{fontWeight:800}}>I'm the patient</div>
+                            <div style={{fontSize:'12px', color:'#999'}}>Open my memory book</div>
+                        </div>
+
+                        <div className="role-card" onClick={() => { setRole("Family"); setView("dashboard"); }}>
+                            <div style={{fontSize:'30px'}}>👥</div>
+                            <div style={{fontWeight:800}}>I'm a family member</div>
+                            <div style={{fontSize:'12px', color:'#999'}}>Manage & add memories</div>
+                        </div>
+                    </div>
+                );
+            }
 
             return (
                 <div className="app-container">
                     <div className="header-banner">
                         <div className="header-title">MemoryLink</div>
-                        <div style={{fontSize: '11px', opacity: 0.8}}>Your Personal Memory Book</div>
-                        <div className="date-display">
+                        <div style={{fontSize: '11px', opacity: 0.8}}>{role} View</div>
+                        <div style={{position:'absolute', right:'20px', top:'25px', textAlign:'right', fontSize:'12px'}}>
                             <strong>Thursday</strong><br/>February 26, 2026
                         </div>
+                        <button className="sign-out" onClick={() => setView("home")}>Sign Out</button>
                     </div>
 
                     <div className="stats-bar">
-                        <span>☀️ Good afternoon! {tasks.filter(t => t.done).length} of 9 tasks done.</span>
-                        <span style={{background: 'var(--accent)', color: 'white', padding: '2px 8px', borderRadius: '10px'}}>🌳 {points}</span>
+                        <span>☀️ Good afternoon! {tasks.filter(t => t.done).length} of {tasks.length} tasks done.</span>
+                        <span style={{background: 'var(--accent)', color: 'white', padding: '2px 10px', borderRadius: '12px'}}>🌳 {points}</span>
                     </div>
 
                     <div className="nav-tabs">
@@ -104,24 +151,48 @@
                                     <div style={{fontSize: '9px', fontWeight: 900, color: '#A67C00'}}>{task.type}</div>
                                 </div>
                             ))}
+
+                            {role === "Family" && (
+                                <div className="add-form">
+                                    <div style={{fontSize:'12px', fontWeight:800, marginBottom:'10px'}}>+ ADD NEW ACTIVITY</div>
+                                    <div className="input-group"><input placeholder="Title (e.g. Lunch with Mary)" value={newTitle} onChange={e=>setNewTitle(e.target.value)} /></div>
+                                    <div className="input-group"><input type="time" value={newTime} onChange={e=>setNewTime(e.target.value)} /></div>
+                                    <div className="input-group">
+                                        <select value={newType} onChange={e=>setNewType(e.target.value)}>
+                                            <option>ACTIVITY</option>
+                                            <option>MEDICATION</option>
+                                            <option>MEAL</option>
+                                            <option>APPOINTMENT</option>
+                                        </select>
+                                    </div>
+                                    <button className="btn-add" onClick={addTask}>Save to Schedule</button>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {activeTab === "People" && (
+                        <div>
+                            <h2 className="section-title">Family</h2>
+                            <div className="people-grid">
+                                <div className="person-card"><div className="avatar">👩‍🦳</div><strong>Margaret</strong><br/><small>Wife</small></div>
+                                <div className="person-card"><div className="avatar">👩</div><strong>Sarah</strong><br/><small>Daughter</small></div>
+                                <div className="person-card"><div className="avatar">👨</div><strong>Tom</strong><br/><small>Son</small></div>
+                            </div>
+                            <h2 className="section-title" style={{marginTop:'20px'}}>Friends</h2>
+                            <div className="people-grid">
+                                <div className="person-card"><div className="avatar">👵</div><strong>Linda</strong><br/><small>Best Friend</small></div>
+                            </div>
                         </div>
                     )}
 
                     {activeTab === "Brain & Reflection" && (
-                        <div>
-                            <h2 className="section-title">Brain Arithmetic</h2>
-                            <div className="game-card">
-                                <p style={{fontSize: '14px', fontWeight: 700}}>Solve this:</p>
-                                <div className="math-text">9 + 6 = ?</div>
-                                <input 
-                                    type="number" 
-                                    className="game-input" 
-                                    value={gameVal}
-                                    onChange={(e) => setGameVal(e.target.value)}
-                                    placeholder="?"
-                                />
-                                <button className="btn-check" onClick={checkAnswer}>Check ✓</button>
-                                {feedback && <p style={{marginTop: '15px', fontWeight: 700, color: feedback.includes("Correct") ? 'var(--green)' : 'red'}}>{feedback}</p>}
+                        <div style={{padding:'20px', textAlign:'center'}}>
+                            <h2 className="section-title">Daily Puzzle</h2>
+                            <div style={{background:'white', padding:'30px', borderRadius:'20px', border:'1px solid var(--border)'}}>
+                                <p>What is 9 + 6?</p>
+                                <input type="number" style={{width:'60px', padding:'10px', textAlign:'center'}} />
+                                <button className="btn-add" style={{marginTop:'15px'}}>Check Answer</button>
                             </div>
                         </div>
                     )}
@@ -134,7 +205,6 @@
                             <div style={{background: '#EEE', height: '10px', borderRadius: '5px', margin: '20px'}}>
                                 <div style={{background: 'var(--green)', height: '100%', width: `${(points/150)*100}%`, borderRadius: '5px'}}></div>
                             </div>
-                            <p style={{fontSize: '13px'}}>{150 - points} more points to reach Young Tree</p>
                         </div>
                     )}
                 </div>
