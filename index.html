@@ -13,13 +13,11 @@
         body { font-family: 'Nunito', sans-serif; background: #f0f0f0; color: var(--txt); margin: 0; }
         .app-container { max-width: 500px; margin: 0 auto; min-height: 100vh; background: var(--bg); position: relative; border-left: 1px solid #ddd; overflow-x: hidden; }
         
-        
         .home-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; padding: 20px; }
         .logo-box { background: var(--accent); width: 80px; height: 80px; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(232, 160, 32, 0.3); }
         .role-card { background: white; width: 100%; max-width: 300px; padding: 25px; border-radius: 20px; margin: 10px 0; cursor: pointer; border: 2px solid transparent; transition: 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .role-card:hover { border-color: var(--accent); transform: translateY(-2px); }
 
-        
         .header-banner { background: var(--header); color: white; padding: 25px; position: relative; }
         .header-title { font-family: 'Lora', serif; font-size: 24px; margin: 0; }
         .sign-out { position: absolute; right: 20px; bottom: 15px; background: rgba(0,0,0,0.2); border: 1px solid white; color: white; padding: 4px 12px; border-radius: 20px; cursor: pointer; font-size: 11px; font-weight: 800; }
@@ -29,19 +27,16 @@
         .tab { padding: 8px 14px; border-radius: 20px; background: white; border: 1.5px solid #EEE; font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 6px; }
         .tab.active { border-color: var(--accent); background: #FFF9E6; color: var(--header); }
 
-        
         .section-title { padding: 0 20px; font-family: 'Lora', serif; font-size: 20px; margin-bottom: 12px; }
         .routine-item { background: white; margin: 0 15px 10px; padding: 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; align-items: center; gap: 15px; }
         .check-circle { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #DDD; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; }
         .check-circle.done { background: var(--green); border-color: var(--green); color: white; }
 
-       
         .add-form { margin: 15px; padding: 15px; background: #fdf2d9; border-radius: 12px; border: 1px dashed var(--accent); }
         .input-group { margin-bottom: 8px; }
         .input-group input, .input-group select { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #DDD; font-family: inherit; box-sizing: border-box; }
         .btn-add { background: var(--header); color: white; border: none; width: 100%; padding: 10px; border-radius: 8px; font-weight: 800; cursor: pointer; }
 
-        
         .people-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 15px; }
         .person-card { background: white; padding: 15px; border-radius: 15px; border: 1px solid var(--border); text-align: center; }
         .avatar { width: 50px; height: 50px; border-radius: 50%; background: #EEE; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 2px solid var(--accent); }
@@ -53,11 +48,17 @@
         const { useState } = React;
 
         function MemoryLink() {
-            const [view, setView] = useState("home"); // home
+            const [view, setView] = useState("home"); 
             const [role, setRole] = useState(null);
             const [activeTab, setActiveTab] = useState("Routines");
             const [points, setPoints] = useState(101);
             
+            // Brain Games State
+            const [mathProblem, setMathProblem] = useState({ a: 9, b: 6 });
+            const [userAnswer, setUserAnswer] = useState("");
+            const [feedback, setFeedback] = useState("");
+            const [isCorrect, setIsCorrect] = useState(false);
+
             // Routines 
             const [tasks, setTasks] = useState([
                 { id: 1, time: "7:30", title: "Morning Medication", type: "MEDICATION", done: true },
@@ -65,7 +66,6 @@
                 { id: 3, time: "10:30", title: "Morning Walk", type: "ACTIVITY", done: false }
             ]);
 
-            // new tasks
             const [newTitle, setNewTitle] = useState("");
             const [newTime, setNewTime] = useState("");
             const [newType, setNewType] = useState("ACTIVITY");
@@ -86,6 +86,28 @@
                 };
                 setTasks([...tasks, newTask]);
                 setNewTitle(""); setNewTime("");
+            };
+
+            // Math Logic
+            const checkMath = () => {
+                const correct = mathProblem.a + mathProblem.b;
+                if (parseInt(userAnswer) === correct) {
+                    setFeedback("✅ Correct! You earned 5 points!");
+                    setPoints(prev => prev + 5);
+                    setIsCorrect(true);
+                } else {
+                    setFeedback("❌ Not quite! Try again.");
+                    setIsCorrect(false);
+                }
+            };
+
+            const generateNewProblem = () => {
+                const newA = Math.floor(Math.random() * 10) + 1;
+                const newB = Math.floor(Math.random() * 10) + 1;
+                setMathProblem({ a: newA, b: newB });
+                setUserAnswer("");
+                setFeedback("");
+                setIsCorrect(false);
             };
 
             if (view === "home") {
@@ -190,9 +212,27 @@
                         <div style={{padding:'20px', textAlign:'center'}}>
                             <h2 className="section-title">Daily Puzzle</h2>
                             <div style={{background:'white', padding:'30px', borderRadius:'20px', border:'1px solid var(--border)'}}>
-                                <p>What is 9 + 6?</p>
-                                <input type="number" style={{width:'60px', padding:'10px', textAlign:'center'}} />
-                                <button className="btn-add" style={{marginTop:'15px'}}>Check Answer</button>
+                                <p style={{fontSize:'22px', fontWeight:800}}>What is {mathProblem.a} + {mathProblem.b}?</p>
+                                
+                                <input 
+                                    type="number" 
+                                    value={userAnswer}
+                                    onChange={(e) => setUserAnswer(e.target.value)}
+                                    placeholder="?"
+                                    style={{width:'80px', padding:'10px', textAlign:'center', fontSize:'18px', borderRadius:'10px', border:'2px solid #EEE'}} 
+                                />
+                                
+                                {!isCorrect ? (
+                                    <button className="btn-add" style={{marginTop:'15px'}} onClick={checkMath}>Check Answer</button>
+                                ) : (
+                                    <button className="btn-add" style={{marginTop:'15px', background: 'var(--green)'}} onClick={generateNewProblem}>Next Problem</button>
+                                )}
+
+                                {feedback && (
+                                    <div style={{marginTop:'15px', fontWeight:800, color: feedback.includes('✅') ? 'var(--green)' : '#d9534f'}}>
+                                        {feedback}
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )}
